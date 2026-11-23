@@ -1,0 +1,96 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>riso · the paper boat</title>
+<style>body{margin:0;background:#111}canvas{display:block;max-width:100vw;max-height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="../engine/core.js"></script>
+<script src="boat.js"></script>
+<script>
+'use strict';
+// RISO · 9:16 · 24 fps · 7 s. Demo line (Remotion caption): «تا یه روز، دریا خودش اومد.»
+// Look: cream stock, three real ink separations (blue, orange, yellow) printed with multiply, halftone dots,
+// a seed dot, crayon ripples, an iris, a 4-cards-per-second montage (the flipbook reference of the engine).
+// Inks are Riso Blue / Orange / Yellow: warm, and no neon pink (house taste); overlaps make the extra colours.
+// t      what happens
+// 0.0    the seed dot and the boat, printed, crayon ripples every 1/3 s
+// 1.0    an iris opens on the first card
+// 1.5    eight cards, a quarter second each (the montage)
+// 3.5    the last card stays: a printed wave rises and lifts the boat
+usePalette(makePalette({ inks: ['#0078bf', '#ff6c2f', '#ffe800', '#22366b'], accents: ['#ff6c2f', '#0078bf', '#ffe800', '#22366b'] }, 'risoPop'));
+const BX = CX, BY = 1000, BS = 3.0;
+const gray = v => `rgb(${255 - v * 255 | 0},${255 - v * 255 | 0},${255 - v * 255 | 0})`;   // plate coverage 0..1 → grey
+const radial = (g, x, y, r0, r1, c0, c1) => { const gr = g.createRadialGradient(x, y, r0, x, y, r1); gr.addColorStop(0, c0); gr.addColorStop(1, c1); return gr; };
+const linear = (g, y0, y1, c0, c1) => { const gr = g.createLinearGradient(0, y0, 0, y1); gr.addColorStop(0, c0); gr.addColorStop(1, c1); return gr; };
+// one card = three plates drawn in black on white, printed blue, orange, yellow (four-looks.html's risoCard, MIT)
+function risoCard(c, draw) { paper(c); const angles = [.26, 1.31, 0];
+  PAL.inks.slice(0, 3).forEach((ink, k) => { const P = plate(), g = P.getContext('2d'); g.fillStyle = '#000'; g.strokeStyle = '#000'; g.lineWidth = 6; draw(g, k); printPlate(c, P, { cell: 8, ink, angle: angles[k], seed: 30 + k }); }); }
+const cache = fn => { let L = null; return c => { if (!L) { L = layer(); fn(L.getContext('2d')); } blit(c, L); }; };
+const boatPlate = (g, x, y, s, k) => { g.save(); g.translate(x, y); g.scale(s, s);
+  if (k === 0) { g.fillStyle = '#fff'; g.fill(BOAT.hull); g.fill(BOAT.sail); g.lineWidth = 7 / s; g.strokeStyle = '#000'; g.stroke(BOAT.hull); g.stroke(BOAT.sail); }   // knock the boat out of the blue, then outline it
+  if (k === 1) { g.fillStyle = '#fff'; g.fill(BOAT.sail); g.fillStyle = gray(.9); g.fill(BOAT.hull); }   // the sail stays pure yellow
+  if (k === 2) { g.fillStyle = gray(.75); g.fill(BOAT.sail); }
+  g.restore(); };
+
+const CARDS = [
+  c => risoCard(c, (g, k) => { // sun over the sea
+    if (k === 0) { g.fillStyle = linear(g, 0, 1150, gray(.02), gray(.4)); g.fillRect(0, 0, W, 1150); g.fillStyle = '#fff'; g.beginPath(); g.arc(540, 780, 220, 0, TAU); g.fill(); g.fillStyle = gray(.88); g.fillRect(0, 1150, W, H - 1150); }
+    if (k === 1) { g.fillStyle = radial(g, 540, 780, 80, 760, gray(.9), gray(0)); g.fillRect(0, 0, W, 1150); for (let y = 1190; y < 1700; y += 46) { g.fillStyle = gray(.8); g.fillRect(540 - 260 + (y - 1190) * .2, y, 520 - (y - 1190) * .4, 14); } }
+    if (k === 2) { g.fillStyle = gray(.95); g.beginPath(); g.arc(540, 780, 220, 0, TAU); g.fill(); } }),
+  c => risoCard(c, (g, k) => { // lighthouse
+    if (k === 0) { g.fillStyle = gray(.15); g.fillRect(0, 0, W, 1250); g.fillStyle = '#fff'; g.fillRect(450, 560, 180, 690); g.fillStyle = gray(.85); g.fillRect(0, 1250, W, H - 1250); for (let i = 0; i < 7; i += 2) { g.fillStyle = gray(.9); g.fillRect(460, 570 + i * 96, 160, 96); } }
+    if (k === 1) { g.fillStyle = linear(g, 0, 1250, gray(.55), gray(0)); g.fillRect(0, 0, W, 1250); g.fillStyle = '#fff'; g.fillRect(450, 560, 180, 690); for (let i = 1; i < 7; i += 2) { g.fillStyle = gray(.9); g.fillRect(460, 570 + i * 96, 160, 96); } }
+    if (k === 2) { g.fillStyle = gray(.9); g.beginPath(); g.moveTo(540, 520); g.lineTo(1080, 330); g.lineTo(1080, 680); g.closePath(); g.fill(); g.beginPath(); g.moveTo(540, 520); g.lineTo(0, 350); g.lineTo(0, 660); g.closePath(); g.fill(); g.fillRect(495, 490, 90, 80); } }),
+  c => risoCard(c, (g, k) => { // big moon
+    if (k === 0) { g.fillStyle = gray(.9); g.fillRect(0, 0, W, H); g.fillStyle = '#fff'; g.beginPath(); g.arc(540, 820, 340, 0, TAU); g.fill(); }
+    if (k === 1) { g.fillStyle = radial(g, 540, 820, 340, 640, gray(.6), gray(0)); g.fillRect(0, 0, W, H); }
+    if (k === 2) { g.fillStyle = gray(.7); g.beginPath(); g.arc(540, 820, 340, 0, TAU); g.fill(); g.fillStyle = gray(.3); for (const [x, y, r] of [[460, 740, 46], [610, 880, 68], [520, 980, 30]]) { g.beginPath(); g.arc(x, y, r, 0, TAU); g.fill(); } } }),
+  c => risoCard(c, (g, k) => { // the wave
+    if (k === 0) { g.fillStyle = gray(.9); g.beginPath(); g.moveTo(0, H); g.lineTo(0, 1100); g.bezierCurveTo(300, 960, 700, 620, 880, 800); g.bezierCurveTo(930, 880, 780, 950, 720, 930); g.bezierCurveTo(840, 1040, 1080, 1120, 1080, 1280); g.lineTo(1080, H); g.closePath(); g.fill(); g.fillStyle = '#fff'; for (let i = 0; i < 12; i++) { g.beginPath(); g.arc(720 + i * 28, 840 + Math.sin(i) * 34, 15 + (i % 3) * 5, 0, TAU); g.fill(); } }
+    if (k === 1) { g.fillStyle = linear(g, 0, 1100, gray(.75), gray(0)); g.fillRect(0, 0, W, 1100); }
+    if (k === 2) { g.fillStyle = radial(g, 220, 420, 50, 330, gray(.9), gray(0)); g.fillRect(0, 0, W, 900); } }),
+  c => risoCard(c, (g, k) => { // rain and a rainbow
+    const r = rng(9); if (k === 0) { g.fillStyle = gray(.8); g.fillRect(0, 1300, W, H - 1300); g.strokeStyle = gray(.7); g.lineWidth = 3; for (let i = 0; i < 220; i++) { const x = r() * W, y = r() * 1250; g.beginPath(); g.moveTo(x, y); g.lineTo(x - 12, y + 64); g.stroke(); } }
+    if (k === 1) { g.lineWidth = 30; g.strokeStyle = gray(.92); g.beginPath(); g.arc(540, 1300, 360, Math.PI, TAU); g.stroke(); g.lineWidth = 30; g.beginPath(); g.arc(540, 1300, 420, Math.PI, TAU); g.stroke(); }
+    if (k === 2) { g.lineWidth = 30; g.strokeStyle = gray(.92); g.beginPath(); g.arc(540, 1300, 390, Math.PI, TAU); g.stroke(); g.fillStyle = linear(g, 0, 900, gray(.3), gray(0)); g.fillRect(0, 0, W, 900); } }),
+  c => risoCard(c, (g, k) => { // mountains at dusk
+    const ridge = (y, a, w) => { g.beginPath(); g.moveTo(0, H); g.lineTo(0, y); for (let x = 0; x <= 1080; x += 20) g.lineTo(x, y - Math.abs(Math.sin(x / w) * a) - Math.sin(x / 37) * 12); g.lineTo(1080, H); g.closePath(); g.fill(); };
+    if (k === 0) { g.fillStyle = gray(.45); ridge(1100, 260, 260); g.fillStyle = gray(.9); ridge(1340, 180, 170); }
+    if (k === 1) { g.fillStyle = linear(g, 0, 1100, gray(.1), gray(.8)); g.fillRect(0, 0, W, 1100); g.fillStyle = '#fff'; ridge(1100, 260, 260); }
+    if (k === 2) { g.fillStyle = gray(.95); g.beginPath(); g.arc(760, 760, 110, 0, TAU); g.fill(); g.fillStyle = linear(g, 500, 1100, gray(0), gray(.7)); g.fillRect(0, 500, W, 600); } }),
+  c => risoCard(c, (g, k) => { // a night of stars over the sea, a moon and its path
+    const r = rng(11); if (k === 0) { g.fillStyle = gray(.92); g.fillRect(0, 0, W, 1400); g.fillStyle = gray(.6); g.fillRect(0, 1400, W, H - 1400); g.fillStyle = '#fff'; g.beginPath(); g.arc(780, 520, 120, 0, TAU); g.fill(); for (let i = 0; i < 140; i++) { g.beginPath(); g.arc(r() * W, r() * 1350, 2 + r() * 4, 0, TAU); g.fill(); } for (let y = 1430; y < 1900; y += 40) g.fillRect(780 - 120 + (y - 1430) * .1, y, 240 - (y - 1430) * .2, 12); }
+    if (k === 2) { const r2 = rng(11); g.fillStyle = gray(.92); g.beginPath(); g.arc(780, 520, 120, 0, TAU); g.fill(); for (let i = 0; i < 140; i++) { const x = r2() * W, y = r2() * 1350, rr = 2 + r2() * 4; if (i % 3 === 0) { g.beginPath(); g.arc(x, y, rr, 0, TAU); g.fill(); } } for (let y = 1430; y < 1900; y += 40) g.fillRect(780 - 120 + (y - 1430) * .1, y, 240 - (y - 1430) * .2, 12); } }),
+  c => risoCard(c, (g, k) => { // the boat, waiting
+    if (k === 0) { g.fillStyle = gray(.85); g.fillRect(0, 1180, W, H - 1180); }
+    if (k === 1) { g.fillStyle = linear(g, 0, 1180, gray(0), gray(.45)); g.fillRect(0, 0, W, 1180); }
+    boatPlate(g, BX, BY + 100, BS, k); }),
+].map(cache);
+
+// the last card, alive: a printed wave rises under the boat (plates redrawn every frame; three plates cost ~0.1 s)
+function waveCard(c, tau) { const rise = sm(0, 1.6, tau, easeOut), [dy, tilt] = bob(tau, 10, 1.6), crest = lerp(1250, 1060, rise);
+  const yAt = x => crest + Math.sin(x / 150 + tau * 2.4) * 22 + Math.sin(x / 61 - tau * 3.1) * 8;
+  const by = yAt(BX) - 6 + dy, bt = tilt * 1.6;
+  risoCard(c, (g, k) => {
+    const sea = new Path2D(); sea.moveTo(0, H); for (let x = 0; x <= W; x += 20) sea.lineTo(x, yAt(x)); sea.lineTo(W, H); sea.closePath();
+    if (k === 0) { g.fillStyle = gray(.88); g.fill(sea); g.fillStyle = '#fff'; for (let i = 0; i < 9; i++) { const x = 90 + i * 115 + Math.sin(i + tau) * 10; g.beginPath(); g.arc(x, yAt(x) + 12, 14 + (i % 3) * 4, 0, TAU); g.fill(); } }
+    if (k === 1) { g.fillStyle = linear(g, 0, crest, gray(.0), gray(.55)); g.fillRect(0, 0, W, crest + 40); g.fillStyle = '#fff'; g.fill(sea); }   // orange only in the sky: orange over blue goes muddy
+    if (k === 2) { g.fillStyle = gray(.9); g.beginPath(); g.arc(800, 560, 120, 0, TAU); g.fill(); }
+    g.save(); g.translate(BX, by); g.rotate(bt); boatPlate(g, 0, 0, BS, k); g.restore(); });
+  // a wake: short crayon strokes either side of the hull, sliding back
+  for (let k = 0; k < 4; k++) { const off = ((tau * 90 + k * 60) % 240), a = 1 - off / 240; c.save(); c.globalAlpha = a; for (const sd of [-1, 1]) { const x = BX + sd * (250 + off); crayon(c, [[x - 40, yAt(x) + 30 + k * 6], [x + 40, yAt(x) + 34 + k * 6]], '#fff', 3, 70 + k * 2 + (sd > 0 ? 1 : 0)); } c.restore(); }
+}
+
+function intro(c, tau) { paper(c);
+  for (let b = -3; b / 3 <= tau; b++) { const r = (tau - b / 3) * 300; if (r > 10 && r < 1200) crayon(c, ellPts(BX, BY, r, r, 0, Math.max(48, r / 5 | 0)), b % 2 ? PAL.inks[1] : PAL.inks[0], 4, 40 + b, true); }
+  c.save(); c.translate(BX, BY); c.scale(BS, BS); drawBoat(c, 'ink', { draw: lerp(.35, 1, sm(0, .7, tau, t => t)), fill: sm(.3, .8, tau) }, 51); c.restore();
+  seedDot(c, BX, BY + 140, 12, PAL.ink, PAL.inks[1]); }
+
+function shot(c, tau, i) {
+  if (tau < 1.5) { intro(c, tau); const p = sm(1.0, 1.5, tau, easeOut), R = 30 + p * 1100;
+    if (p > 0) { iris(c, BX, BY, R, cc => CARDS[0](cc)); c.strokeStyle = PAL.ink; c.lineWidth = 3; wob(c, ellPts(BX, BY, R, R, 0, 120), 2, 41, true); } return; }
+  if (tau < 3.5) { montage(c, CARDS, tau - 1.5, .25, i); seedDot(c, BX, BY + 140, 12, PAL.ink, PAL.inks[1]); return; }
+  waveCard(c, tau - 3.5);
+}
+
+defineFilm({ palette: PAL, format: { ar: '9:16', width: 1080 }, fps: 24, timeline: [{ name: 'riso', dur: 7, fn: shot }] });
+</script>

@@ -1,0 +1,37 @@
+{
+  "title": "The Vent · 9:16 tale",
+  "format": "2:3",
+  "style": "Style: painterly 2D animated-film look EXACTLY like the attached character sheet — hand-painted soft textures and gentle brush grain, thin soft line work only where the sheet uses it, natural proportions, soft cinematic light and ambient shadow, slightly desaturated; rich, layered and detailed (props, wear, dirt, texture), quiet and eerie, never cute or cartoony. Colours only from the palette: pale sage #DCE3DC, sage #8FA89B, deep forest green #12332C, near-black forest #0B1F1A, blush #F7DCCF, tomato red #FF5638 as the single sparing accent.",
+  "palette": [
+    ["#DCE3DC", "pale sage", "day walls, sky, light surfaces"],
+    ["#8FA89B", "sage", "mid tones, tiles, metal"],
+    ["#12332C", "deep forest green", "doors, dark surfaces, shadows"],
+    ["#0B1F1A", "near-black forest", "night, deepest shadows"],
+    ["#F7DCCF", "blush", "skin, sheets, warm highlights"],
+    ["#FF5638", "tomato red", "the ONE accent: wristband, emergency light — use sparingly"]
+  ],
+  "character": {
+    "A": "THE HERO = the character from the attached character sheet, identical face, hair and proportions (messy black-green hair, soft round face, big dark eyes). OUTFIT A: pale blush hospital scrubs with a tomato-red plastic ID wristband on the left wrist, sage hospital slippers."
+  },
+  "designs": {
+    "RESCUER DESIGN": "RESCUER DESIGN (identical in every image): a loose blush-white hazmat coverall with sage seam tape and a zipper flap, a hood that wraps the whole head, a full-face respirator mask with ONE large round glass visor and two short round filter canisters in deep forest green, sage rubber gloves taped at the wrists, deep forest green rubber boots, a small blank tomato-red patch on the left chest."
+  },
+  "rules": [
+    { "if": "^NIGHT\\.", "add": "Night look: mostly near-black forest #0B1F1A and deep forest #12332C, the only strong light is tomato-red #FF5638 emergency light; keep every shape readable (deep green-black, never pure black)." },
+    { "if": "CUTOUT", "add": "Only this one subject; nothing else drawn." }
+  ],
+  "shots": [
+    { "id": "C01", "kind": "sheet", "char": "A", "for": "the master reference (make it first; approve it before anything else)", "p": "Character design sheet of THE HERO: front view, three-quarter view, back view, and four head close-ups (calm, worried, frightened, whispering)." },
+    { "id": "Y07", "kind": "cutout", "char": "A", "for": "line 1–2 · on the edge of the bed", "p": "CUTOUT, transparent background. THE HERO sitting on the edge of a bed (bed not drawn), 3/4 back view, hands on the knees, shoulders slumped, looking toward a window on the right. Soft overcast daylight from the right." },
+    { "id": "Y09", "kind": "cutout", "char": "A", "for": "line 4 · writes a name on the glass", "p": "CUTOUT, transparent background. Close-up of THE HERO's hand (tomato-red ID wristband) rising from the bottom of the frame, index finger extended to write on glass, palm away from the viewer. Morning light." },
+    { "id": "Y11", "kind": "cutout", "char": "A", "for": "line 6 / 11 · in bed at night", "p": "CUTOUT, transparent background. NIGHT. THE HERO lying in bed (bed not drawn), only the head and the top edge of a pale blush blanket pulled up to the chin, seen from slightly above; eyes wide open sliding toward the door. Lit from one side by tomato-red light, the rest in deep green-black shadow." },
+    { "id": "S23", "kind": "cutout", "for": "line 8 · something walks down the hallway", "p": "CUTOUT, transparent background. A figure in the RESCUER DESIGN walking slowly toward the viewer, full body, front three-quarter view, mid-step, head slightly tilted, visor fogged from the inside. Red rim light from behind, the front in deep shadow." },
+    { "id": "P16", "kind": "plate", "for": "line 1–2 · the room", "p": "Inside a small bare hospital room, seen from the doorway: a narrow metal bed with pale blush sheets, one simple metal chair, a steel side table with a paper cup and a water jug, a tall narrow window opened only a crack, the city in haze beyond it. A clear area of plain pale sage wall beside the bed. Soft overcast daylight, quiet and lonely. The room is EMPTY (the hero is added later)." },
+    { "id": "P17", "kind": "plate", "for": "line 2 · a window that opens a hand's width", "p": "Close-up of a tall hospital window opened only a few centimetres: a steel restrictor arm stops it, the frame is chipped, cold pale daylight through the gap, the city skyline far away in haze." },
+    { "id": "P18", "kind": "plate", "for": "line 3–4 · the intercom", "p": "Close-up, straight on, of an old wall intercom panel: brushed steel plate with four screws, a round speaker grille of small holes, one large round blush push button, a tiny tomato-red indicator light and a small empty label frame. Pale sage wall, soft morning light from the side." },
+    { "id": "P19", "kind": "plate", "for": "line 4 · the glass in the door", "p": "The inside of the room's door at eye level: a square wire-mesh glass window fills the middle, the bright hallway beyond it out of focus, a faint fog patch on the glass. Deep forest green door paint with scratches. Morning light." },
+    { "id": "P20", "kind": "plate", "for": "line 6–7, 12 · the vent between the rooms", "p": "NIGHT. An old metal air vent grille low on the wall near the bed: horizontal slats, rusty screws, flaking paint. A soft tomato-red light glows through the slats from the room on the other side, striped light on the floor and the edge of the sheet." },
+    { "id": "P22", "kind": "plate", "for": "line 8 · the hallway at two a.m.", "p": "NIGHT. A long hospital corridor of deep forest green doors in one-point perspective: the ceiling lights are off, one tomato-red emergency light at the far end, long red reflections on the wet tiled floor. The corridor is EMPTY (a figure is added later)." },
+    { "id": "P25", "kind": "plate", "for": "line 9 · it stops outside your door", "p": "NIGHT. From inside the dark room at floor level, the bottom of the closed door: the gap glows with red hallway light, and in it the dark shadows of two boots standing perfectly still." }
+  ]
+}

@@ -1,0 +1,115 @@
+{
+  "positive_global_styles": [
+    "epic cinematic hybrid orchestral electronic intro music",
+    "122 BPM steady tempo in 4/4",
+    "driving and powerful from the very first beat",
+    "punchy modern kick drum and deep sub bass",
+    "bold memorable heroic melody on brass and analog synth lead",
+    "fast sixteenth note synth arpeggios and soaring strings",
+    "huge cinematic impacts, risers and whooshes",
+    "wide polished film trailer and logo reveal mix",
+    "instrumental"
+  ],
+  "negative_global_styles": [
+    "vocals",
+    "singing",
+    "lyrics",
+    "spoken word",
+    "lo-fi",
+    "acoustic guitar",
+    "jazz",
+    "comedic",
+    "cheesy",
+    "horror",
+    "harsh distortion",
+    "dubstep growl",
+    "slow ambient intro",
+    "long silence"
+  ],
+  "sections": [
+    {
+      "section_name": "Opening",
+      "positive_local_styles": [
+        "starts instantly on the first beat with a punchy kick drum and deep sub bass",
+        "driving sixteenth note synth arpeggio from the first bar",
+        "bold heroic lead melody enters in the first bar",
+        "mysterious minor key, confident and energetic",
+        "tight hi-hats"
+      ],
+      "negative_local_styles": [
+        "silence at the start",
+        "slow fade in",
+        "ambient drone only",
+        "no drums"
+      ],
+      "duration_ms": 7870,
+      "lines": []
+    },
+    {
+      "section_name": "Rise",
+      "positive_local_styles": [
+        "the same groove grows bigger, low strings and big toms join",
+        "the melody repeats an octave higher",
+        "energy building bar by bar",
+        "last bar is a huge riser with a snare roll into the drop"
+      ],
+      "negative_local_styles": [
+        "calm",
+        "breakdown",
+        "silence"
+      ],
+      "duration_ms": 7870,
+      "lines": []
+    },
+    {
+      "section_name": "The golden hall",
+      "positive_local_styles": [
+        "massive drop on the first beat with a huge cinematic impact",
+        "majestic wide brass and string chords in a major key, awe and grandeur",
+        "powerful four on the floor drums with big toms",
+        "soaring heroic lead melody",
+        "full and wide"
+      ],
+      "negative_local_styles": [
+        "sparse",
+        "ambient only",
+        "dark and scary"
+      ],
+      "duration_ms": 7870,
+      "lines": []
+    },
+    {
+      "section_name": "Towards the core",
+      "positive_local_styles": [
+        "tension build, the drums drop to a pulsing kick",
+        "fast rising arpeggio and accelerating snare roll",
+        "long riser and reverse cymbal swell",
+        "everything cuts out in the last half beat"
+      ],
+      "negative_local_styles": [
+        "relaxed",
+        "resolution"
+      ],
+      "duration_ms": 3930,
+      "lines": []
+    },
+    {
+      "section_name": "Logo reveal",
+      "positive_local_styles": [
+        "one enormous final impact hit on the first beat",
+        "a single bright triumphant major chord held by brass, strings and a shimmering synth pad",
+        "sparkling bells and glass shimmer",
+        "no drums after the impact",
+        "very long majestic reverb tail slowly fading to silence"
+      ],
+      "negative_local_styles": [
+        "drum groove continues",
+        "new melody",
+        "abrupt cut",
+        "fading out too early"
+      ],
+      "duration_ms": 6000,
+      "lines": []
+    }
+  ]
+}

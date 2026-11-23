@@ -1,0 +1,10 @@
+# Demo narration (Persian): one sentence per line, "[delivery tags] text | pause after (s)". The tags steer an
+# expressive voice and are not spoken. The demo ships without audio: vo.json next to this file is sample timing for
+# these lines. Your own: write videos/<slug>/script.txt like this, then follow pipeline/README.md (voice -> vo.json).
+[storytelling, intrigued] وسطِ طوفان، چراغِ آشپزخونه‌ی کشتی دیوونه‌وار تاب می‌خوره. | 0.2
+[nervous, light] آشپز هر لحظه منتظره که بیفته روی سرش. | 0.2
+[playful] ولی بیا بیرون رو ببین. | 0.2
+[storytelling] موج‌ها کشتی رو مثل گهواره این‌ور و اون‌ور می‌برن. | 0.2
+[revealing] ماجرا اینه که اونی که تاب می‌خوره چراغ نیست؛ خودِ کشتیه. | 0.2
+[warm, explaining] چراغِ آویزون همیشه صاف رو به پایین می‌مونه، هر چقدر هم کشتی کج بشه. | 0.2
+[deadpan] حالا آشپز دیگه نگرانِ چراغ نیست؛ نگرانِ سوپشه.

@@ -1,0 +1,19 @@
+[
+ { "id": "fridge_stop", "text": "an old refrigerator compressor humming, then clicking off into silence, quiet kitchen room tone", "dur": 3 },
+ { "id": "phone_alert", "text": "a smartphone emergency alert tone, harsh two-tone beeps, then vibration on a wooden table", "dur": 3 },
+ { "id": "tap_fill", "text": "kitchen tap running into a plastic bottle, the pitch rising as it fills", "dur": 4 },
+ { "id": "bathtub", "text": "bathtub tap running fast into a half-full tub, echoing small bathroom", "dur": 4 },
+ { "id": "cans", "text": "food cans and jars set down one by one on a wooden table", "dur": 3 },
+ { "id": "pencil", "text": "a pencil writing quickly on notebook paper, close", "dur": 3 },
+ { "id": "radio_tune", "text": "turning the dial of an old portable radio through static and whistles, landing on a station", "dur": 3 },
+ { "id": "lamp_click", "text": "a table lamp switch clicking off in a quiet room", "dur": 1 },
+ { "id": "room_night", "text": "quiet apartment at night, distant city, a faint hum, no voices", "dur": 20 },
+ { "id": "knock_one", "text": "ONE single clean knock of a knuckle on a metal radiator pipe, close, dry", "dur": 0.6 },
+ { "id": "intercom_on", "text": "an old wall intercom crackling on, a short buzz and a click", "dur": 2 },
+ { "id": "glass_squeak", "text": "a fingertip writing on a fogged glass window, squeaking", "dur": 3 },
+ { "id": "paper_tape", "text": "a sheet of paper slapped onto a wall and taped down, four tape tears", "dur": 3 },
+ { "id": "stamp", "text": "a heavy rubber stamp slammed on paper on a wall", "dur": 1 },
+ { "id": "vent_air", "text": "air moving through a metal duct at night, a low hollow whisper of wind", "dur": 20 },
+ { "id": "boots_walk", "text": "slow heavy rubber boots walking down a tiled hospital corridor, squeaking, getting closer", "dur": 6 },
+ { "id": "emergency_buzz", "text": "a failing fluorescent emergency light buzzing and flickering", "dur": 15 }
+]

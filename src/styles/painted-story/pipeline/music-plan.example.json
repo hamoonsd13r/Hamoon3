@@ -1,0 +1,16 @@
+{
+ "positive_global_styles": [
+  "dark cinematic film score, quiet underscore for a narrated story",
+  "minimalist and atmospheric: low drones, cold sustained strings, sparse felt-piano notes, subtle metallic textures",
+  "slow, about 60 BPM, lots of space, tension that never fully resolves",
+  "high-end modern film-score recording"
+ ],
+ "negative_global_styles": ["vocals", "singing", "choir", "lyrics", "EDM", "drum kit", "trap", "rock", "happy", "upbeat", "loud jump-scare stingers", "comedy"],
+ "sections": [
+  { "section_name": "Morning", "positive_local_styles": ["a lonely felt-piano motif, very quiet, leaves room for the voice", "soft electric hum"], "negative_local_styles": ["drums", "loud"], "duration_ms": 18000, "lines": [] },
+  { "section_name": "Routine", "positive_local_styles": ["the same motif, a soft cello line underneath, clinical and cold"], "negative_local_styles": ["drums", "pulse"], "duration_ms": 16000, "lines": [] },
+  { "section_name": "Night", "positive_local_styles": ["night: dark low drone, distant metallic creaks, soft sub pulse, dread under the surface"], "negative_local_styles": ["melody hooks", "loud"], "duration_ms": 12000, "lines": [] },
+  { "section_name": "Footsteps", "positive_local_styles": ["slow dread build, a heartbeat sub pulse getting closer, dissonant strings rising very slowly"], "negative_local_styles": ["release", "drum kit"], "duration_ms": 8000, "lines": [] },
+  { "section_name": "End", "positive_local_styles": ["a deep low hit, then a long cold sustained tone fading out"], "negative_local_styles": ["drums"], "duration_ms": 8000, "lines": [] }
+ ]
+}

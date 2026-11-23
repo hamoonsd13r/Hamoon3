@@ -1,0 +1,10 @@
+{
+  "_usage": "node --env-file=.env tools/eleven-music-plan.mjs src/styles/talk-page/pipeline/music-plan.json work/m1.mp3 1 — a bed under a talking head. Generated music rarely keeps the sections: measure it (pipeline/music-env.cjs), then make ONE steady bed with tools/music-steady.mjs. Set the section lengths to your talk (total ≈ its length + 10 s). Delete this _usage key before sending if the tool complains.",
+  "positive_global_styles": ["modern electronic underscore", "warm pulse from the very first second", "soft sub bass", "tight light drums", "curious and confident", "background music under a spoken voice", "instrumental", "clean modern mix", "120 BPM"],
+  "negative_global_styles": ["vocals", "choir", "dubstep wobble", "trap hi-hat rolls", "heroic brass", "lo-fi vinyl crackle", "distorted guitar", "long silent intro", "orchestral epic", "horror", "comedy"],
+  "sections": [
+    { "section_name": "Groove", "positive_local_styles": ["steady groove from the first beat", "plucky synth pulse", "soft kick on every beat"], "negative_local_styles": ["silence", "slow fade in", "breakdown"], "duration_ms": 32000, "lines": [] },
+    { "section_name": "Groove, second phrase", "positive_local_styles": ["same groove, one new light layer", "keep the energy level"], "negative_local_styles": ["drop", "breakdown", "big build"], "duration_ms": 32000, "lines": [] },
+    { "section_name": "Ending", "positive_local_styles": ["final hit then a short natural decay"], "negative_local_styles": ["abrupt cut", "new groove"], "duration_ms": 4000, "lines": [] }
+  ]
+}

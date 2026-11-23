@@ -1,0 +1,30 @@
+{
+ "_": "Sound plan for the doc demo (cues are words of vo.json). sfx: [id, cue, volume, 'on'|'pk']; beds: [id, start, end, volume]; music: [file, start, fadeIn, end, fadeOut]. Knock ids come from knock-motif.mjs (motifDir).",
+ "vo": "public/v01/vo.wav",
+ "raw": "videos/01/sfx/raw",
+ "motifDir": "videos/01/sfx/motif",
+ "sfx": [
+  ["fridge_stop", "W:1:یخچال", 0.55, "on"],
+  ["phone_alert", "S:2", 0.55, "on"],
+  ["tap_fill", "S:3", 0.45, "on"],
+  ["bathtub", "W:3:وانِ", 0.45, "on"],
+  ["cans", "S:5", 0.45, "on"],
+  ["pencil", "S:6", 0.45, "on"],
+  ["radio_tune", "S:7", 0.45, "on"],
+  ["lamp_click", "W:9:تاریکی", 0.55, "on"],
+  ["k3_wood", "E:10+0.3", 1.0, "on"],
+  ["k3_floor", "E:12+0.3", 1.0, "on"]
+ ],
+ "beds": [
+  ["room_night", "S:9", "end", 0.3]
+ ],
+ "music": [
+  ["public/v01/music/m1.mp3", "0", 2, "S:9+0.5", 3],
+  ["public/v01/music/m2.mp3", "S:9-0.5", 3, "end", 4]
+ ],
+ "mix": {
+  "musicBase": 0.2, "musicLift": 0.17, "sfxGain": 0.12, "voGain": 1.0,
+  "duck": { "threshold": 0.03, "ratio": 3, "attack": 30, "release": 450 },
+  "musicEq": "equalizer=f=2600:t=q:w=1.2:g=-3"
+ }
+}

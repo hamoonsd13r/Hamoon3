@@ -1,0 +1,13 @@
+[
+  { "u": [1, 4], "kind": "retake", "note": "first greeting, a sip of water, a cough — the second greeting stays" },
+  { "u": [15, 15], "kind": "retake", "note": "half sentence, the next one says it right" },
+  { "in": 52, "cut": "این یه مسیره که", "kind": "retake", "note": "said twice — the LAST clean take stays" },
+  { "in": 42, "cut": "یادش نمون،", "kind": "stumble", "note": "«یادش نمون، یادش نمی‌مونه»" },
+  { "in": 76, "cut": "یه ری،", "nth": 2, "kind": "stumble", "note": "the second occurrence in that utterance" },
+  { "from": [78, "نوع مح،"], "to": [79, "صفحه‌ش،"], "kind": "retake", "note": "a restart across two utterances" },
+  { "from": [120, null], "to": [168, "حالا"], "kind": "section", "note": "the off-topic part the teacher asked to remove" },
+  { "t": [1532.40, 1532.95], "kind": "filler", "note": "an «اِمم» the first transcript did not write down (found by the re-check)" },
+  { "in": 210, "cut": "سه", "endAt": 1830.42, "kind": "stumble", "note": "soft «س» onset looked like a dip — edge pinned by hand" },
+  { "mark": [233, "اینجا"], "kind": "blur", "note": "a password is typed on screen here — blur it in Premiere" },
+  { "mark": [301, "ببینید"], "kind": "check", "note": "the voice is unclear here — listen before export" }
+]

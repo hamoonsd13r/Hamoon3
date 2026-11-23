@@ -1,0 +1,71 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>pencil · the paper boat</title>
+<style>body{margin:0;background:#111}canvas{display:block;max-width:100vw;max-height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="../engine/core.js"></script>
+<script src="boat.js"></script>
+<script>
+'use strict';
+// PENCIL · 9:16 · 24 fps · 7 s. Demo line (Remotion caption): «هر شب نقشه‌ی سفر رو می‌کشید.»
+// Look: cream paper and charcoal, thin graphite, open contours, a wall of squiggle writing, torn coloured sections,
+// pressed plants, a thread down the page (the personal-website reference of the engine's pencilMinimal palette).
+// t      what happens
+// 0.0    the notes write themselves at the top of the page, a thread runs down it
+// 0.3    pencil construction, then the boat's open outline
+// 1.4    a dotted route leaves the boat and curls up to a small island with a plant
+// 2.6    a sticky note with a compass is pressed on
+// 3.8    a pale sage section is torn in from below and pressed plants grow on it
+// 4.9    dotted rings ripple out from the island: the place it keeps drawing
+usePalette(makePalette({ accents: ['#e8642a', '#7a8a55', '#c9a14a', '#b8735a'] }, 'pencilMinimal'));
+const BX = CX, BY = 980, BS = 3.0;
+
+// the route: a cubic from the boat's bow to the island, drawn as pencil dots that appear one by one
+const ROUTE = [[BX + 250, BY - 60], [BX + 470, BY - 320], [BX + 60, BY - 420], [BX + 290, BY - 640]];
+function route(c, p) { if (p <= 0) return; const n = 46, r = rng(77); c.save(); c.fillStyle = PAL.ink;
+  for (let k = 0; k <= n * p; k++) { const q = bez(...ROUTE, k / n); c.globalAlpha = .55 + r() * .35; c.beginPath(); c.arc(q[0] + (r() - .5) * 2, q[1] + (r() - .5) * 2, 3.2 + r() * 1.4, 0, TAU); c.fill(); }
+  c.restore(); }
+function island(c, k, tau) { if (k <= 0) return; const [x, y] = ROUTE[3]; c.save(); c.globalAlpha = k;
+  const hill = [[x - 120, y + 30], [x - 70, y - 18], [x + 10, y - 30], [x + 80, y - 12], [x + 130, y + 30]];
+  c.fillStyle = alpha(PAL.accents[2], .35); c.fill(polyPath(smoothPts(hill.concat([[x + 130, y + 32], [x - 120, y + 32]]), true)));
+  c.strokeStyle = PAL.ink; c.lineWidth = 1.6; wob(c, hill, 1.4, 81);
+  hatch(c, polyPath(hill.concat([[x + 130, y + 32], [x - 120, y + 32]])), [x - 130, y - 40, 270, 80], { angle: 1.1, gap: 8, len: 22, jitter: 4, color: PAL.ink, alpha: .25, width: .7, seed: 82 });
+  plant(c, x - 4, y - 26, 70 * k, 3, 84, { leaf: PAL.accents[1], flower: PAL.accents[0], width: 1.3 });
+  // the X the route is for
+  c.strokeStyle = PAL.accents[0]; c.lineWidth = 3; c.globalAlpha = k * sm(0, .3, tau - 2.5);
+  wob(c, [[x + 40, y - 70], [x + 70, y - 40]], 1, 85); wob(c, [[x + 70, y - 70], [x + 40, y - 40]], 1, 86);
+  c.restore(); }
+
+function shot(c, tau, i) {
+  paper(c);
+  cam(c, CX, CY, lerp(1.04, 1.0, sm(0, 7, tau, easeInOutSine)));
+  // the notes at the top of the page: one more line every 0.2 s
+  const rows = Math.min(7, 1 + Math.floor(tau / .2));
+  squiggleText(c, 96, 300, 620, rows, { seed: 80, lineH: 34, amp: 6, color: PAL.shade, width: 1.4 });
+  thread(c, 980, 96, PAL.accents[0]);
+  // construction, then the boat in thin graphite
+  construction(c, BX, BY - 50, 170, 12, PAL.guide, .7 * (1 - .6 * sm(2, 3, tau)));
+  const [dy, tilt] = bob(tau, 4, 2.6);
+  c.save(); c.translate(BX, BY + dy * sm(1.5, 2.5, tau)); c.scale(BS, BS);
+  drawBoat(c, 'ink', { draw: lerp(.08, 1, sm(0, 1.2, tau, t => t)), fill: sm(1.0, 1.8, tau), note: true, tilt: tilt * sm(1.5, 2.5, tau), width: 1.6 }, 41);
+  c.restore();
+  route(c, sm(1.4, 2.6, tau, t => t));
+  island(c, sm(2.3, 2.8, tau, easeOut), tau);
+  // the sticky note with a compass rose
+  const sn = sm(2.6, 2.9, tau, easeOut);
+  if (sn > 0) { c.save(); c.globalAlpha = sn; c.translate(0, (1 - sn) * -30);
+    stickyNote(c, 120, 700, 190, 91, (g, s) => { g.strokeStyle = PAL.ink; g.lineWidth = 1.3; const m = s / 2;
+      wob(g, ellPts(m, m, 58, 58, 0, 40), 1, 92, true); wob(g, [[m, m - 78], [m + 12, m], [m, m + 78], [m - 12, m]], 1, 93, true, { smooth: false });
+      wob(g, [[m - 78, m], [m, m - 10], [m + 78, m], [m, m + 10]], 1, 94, true, { smooth: false }); g.fillStyle = PAL.accents[0]; g.beginPath(); g.arc(m, m - 78, 5, 0, TAU); g.fill(); });
+    c.restore(); }
+  // a pale section torn in from below, with pressed plants growing on it
+  const y1 = lerp(H + 40, 1590, sm(3.8, 4.6, tau, easeOut));
+  if (y1 < H) { section(c, y1, '#cfd8c0', 82); cam(c, CX, CY, lerp(1.04, 1.0, sm(0, 7, tau, easeInOutSine)));
+    [[150, 95, 4, 83], [400, 70, 3, 85], [700, 90, 4, 87], [930, 75, 3, 88]].forEach(([x, h, d, s]) => plant(c, x, H + 30, h * sm(4.0, 5.0, tau), d, s, { leaf: PAL.accents[1], flower: PAL.accents[0] })); }
+  // dotted rings ripple out from the island
+  const [ix, iy] = ROUTE[3];
+  for (let k = 0; k < 4; k++) { const r = (tau - 4.9 - k * .45) * 160; if (r > 20 && r < 420) { c.save(); c.globalAlpha = 1 - r / 420; dottedArc(c, ix, iy - 20, r, PAL.shade, 120 + k, 11, 1.6); c.restore(); } }
+}
+
+defineFilm({ palette: PAL, format: { ar: '9:16', width: 1080 }, fps: 24, timeline: [{ name: 'pencil', dur: 7, fn: shot }] });
+</script>

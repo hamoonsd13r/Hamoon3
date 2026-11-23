@@ -1,0 +1,6 @@
+[
+ { "name": "N1-calm", "id": "<voiceId>", "text": "ساعتِ شیش و ده دقیقه‌ی صبح، صدای یخچال یهو قطع می‌شه؛ خونه اون‌قدر ساکت می‌شه که از خواب می‌پری.", "settings": { "stability": 0.5, "similarity_boost": 0.75 } },
+ { "name": "N2-deep", "id": "<voiceId>", "text": "ساعتِ شیش و ده دقیقه‌ی صبح، صدای یخچال یهو قطع می‌شه؛ خونه اون‌قدر ساکت می‌شه که از خواب می‌پری.", "settings": { "stability": 0.5, "similarity_boost": 0.75 } },
+ { "name": "N3-warm", "id": "<voiceId>", "text": "ساعتِ شیش و ده دقیقه‌ی صبح، صدای یخچال یهو قطع می‌شه؛ خونه اون‌قدر ساکت می‌شه که از خواب می‌پری.", "settings": { "stability": 0.5, "similarity_boost": 0.75 } },
+ { "name": "M1-neighbour", "id": "<voiceId>", "text": "[whispers] اتاقِ هشتم‌ام. یه ضربه یعنی آره، دو تا یعنی نه.", "settings": { "stability": 0.4, "similarity_boost": 0.8, "style": 0.35 }, "model": "eleven_v3" }
+]

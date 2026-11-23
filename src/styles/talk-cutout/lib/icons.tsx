@@ -1,0 +1,92 @@
+// Talk Cutout · marks and UI icons. YouTube and Instagram marks: simple-icons path data (CC0); the marks themselves are
+// their owners' trademarks, used only to name the apps on screen. UI icons: plain strokes, viewBox 24.
+import React from "react";
+import { C, F } from "./theme";
+
+const YT_PATH =
+  "M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814z";
+const IG_PATH =
+  "M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077";
+
+type MarkP = { size: number; style?: React.CSSProperties };
+export const YouTubeMark: React.FC<MarkP & { play?: string }> = ({ size, style, play = "#fff" }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: "block", ...style }}>
+    <path d={YT_PATH} fill={C.yt} />
+    <path d="M9.545 15.568V8.432L15.818 12z" fill={play} />
+  </svg>
+);
+let gid = 0;
+export const InstagramMark: React.FC<MarkP & { mono?: string }> = ({ size, style, mono }) => {
+  const id = React.useMemo(() => `tcig${gid++}`, []);
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: "block", ...style }}>
+      <defs>
+        <radialGradient id={id} cx="0.3" cy="1.07" r="1.25">
+          <stop offset="0" stopColor="#FFDD55" />
+          <stop offset="0.12" stopColor="#FFDD55" />
+          <stop offset="0.48" stopColor="#FF543E" />
+          <stop offset="0.75" stopColor="#C837AB" />
+          <stop offset="1" stopColor="#3771C8" />
+        </radialGradient>
+      </defs>
+      <path d={IG_PATH} fill={mono ?? `url(#${id})`} />
+    </svg>
+  );
+};
+
+/** a neutral «which AI?» mark for the one you keep secret (the CTA promises the answer in the DM): blur it with `hidden` */
+export const MysteryMark: React.FC<MarkP & { hidden?: boolean }> = ({ size, style, hidden }) => (
+  <div style={{ width: size, height: size, borderRadius: size * 0.28, background: `linear-gradient(140deg, ${C.cream}, ${C.accent2} 55%, ${C.accent})`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: F.ui, fontWeight: 900, fontSize: size * 0.42, color: C.accentInk, letterSpacing: -size * 0.02, filter: hidden ? `blur(${(size * 0.15).toFixed(2)}px)` : undefined, ...style }}>
+    AI
+  </div>
+);
+/** blur for a word or mark you keep secret on screen (≈ 0.15 × its size melts it into a soft blob) */
+export const hideBlur = (px: number, on = true): React.CSSProperties => (on ? { filter: `blur(${px}px)` } : {});
+
+// ── UI icons (stroke, viewBox 24) ───────────────────────────────────────────────────────────────────────────────
+const IC: Record<string, string> = {
+  plus: "M12 5v14M5 12h14",
+  up: "M12 19V5M5.5 11.5L12 5l6.5 6.5",
+  check: "M5 12.5l4.5 4.5L19 7.5",
+  down: "M12 4v12M6.5 10.5L12 16l5.5-5.5M5 20h14",
+  back: "M15 5l-7 7 7 7",
+  dots: "M5 12h.01M12 12h.01M19 12h.01",
+  eye: "M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12zM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z",
+  search: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14zM20 20l-4-4",
+  bell: "M6 16V11a6 6 0 0 1 12 0v5l2 2H4zM10 20a2 2 0 0 0 4 0",
+  cast: "M3 8V6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5M3 12a8 8 0 0 1 8 8M3 16a4 4 0 0 1 4 4",
+  home: "M4 11l8-7 8 7v9H4z",
+  heart: "M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z",
+  chat: "M4 5h16v11H9l-5 4z",
+  send: "M21 3L10 14M21 3l-7 18-4-7-7-4z",
+  mic: "M12 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3zM5 11a7 7 0 0 0 14 0M12 18v3",
+  film: "M4 5h16v14H4zM8 5v14M16 5v14M4 9.5h4M16 9.5h4M4 14.5h4M16 14.5h4",
+  play: "M8 5.5v13l11-6.5z",
+  user: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4 21a8 8 0 0 1 16 0",
+  trend: "M4 17l6-6 4 4 6-7M14 8h6v6",
+  paperclip: "M20 11l-8.5 8.5a5 5 0 0 1-7-7L13 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L14 7",
+  lock: "M7 11V8a5 5 0 0 1 10 0v3M5 11h14v10H5z",
+  camera: "M4 8h3l2-3h6l2 3h3v11H4zM12 17a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z",
+  calendar: "M4 6h16v15H4zM4 10h16M8 3v5M16 3v5",
+  upload: "M12 20V8M6.5 13.5L12 8l5.5 5.5M5 4h14",
+  bulb: "M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z",
+  pen: "M4 20l4-1 11-11-3-3L5 16zM14 6l3 3",
+  list: "M9 6h11M9 12h11M9 18h11M4.5 6h.01M4.5 12h.01M4.5 18h.01",
+  clock: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 7v5l3 2",
+  spark: "M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6",
+};
+export const Icon: React.FC<{ n: keyof typeof IC | string; size: number; color?: string; sw?: number; fill?: string; style?: React.CSSProperties }> = ({ n, size, color = C.cream, sw = 2, fill = "none", style }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" style={{ display: "block", ...style }}>
+    <path d={IC[n]} fill={fill} stroke={color} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** «YOUR BRAND» mark: replace with your own SVG (tools/logo-trace.mjs) or pass `text` */
+export const BrandMark: React.FC<{ h: number; text?: string; color?: string; style?: React.CSSProperties }> = ({ h, text = "YOUR BRAND", color = C.cream, style }) => (
+  <div style={{ display: "inline-flex", alignItems: "center", gap: h * 0.3, direction: "ltr", ...style }}>
+    <div style={{ width: h, height: h, borderRadius: h * 0.28, border: `${Math.max(2, h * 0.09)}px solid ${color}`, position: "relative" }}>
+      <div style={{ position: "absolute", right: -h * 0.16, bottom: -h * 0.16, width: h * 0.38, height: h * 0.38, borderRadius: "50%", background: C.accent }} />
+    </div>
+    <span style={{ fontFamily: F.anton, fontSize: h * 0.82, lineHeight: 1, color, letterSpacing: h * 0.02 }}>{text}</span>
+  </div>
+);

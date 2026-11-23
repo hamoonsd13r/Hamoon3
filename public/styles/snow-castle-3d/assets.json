@@ -1,0 +1,5 @@
+{
+ "env": "hdr/overcast_soil_puresky_2k.hdr",
+ "bg": "hdr/overcast_soil_puresky_2k.hdr",
+ "tex": "1k"
+}
