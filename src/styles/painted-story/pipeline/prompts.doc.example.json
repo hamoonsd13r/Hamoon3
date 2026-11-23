@@ -1,0 +1,34 @@
+{
+  "title": "Three days without power · 16:9",
+  "format": "16:9",
+  "style": "Style: clean 2D cartoon illustration like a modern animated YouTube story: thin smooth dark outlines, flat muted colours with soft shading, detailed painted backgrounds, cinematic lighting. Palette: muted teal-grey, sage green, sand and warm ochre by day; deep indigo with warm lamp pools at night. Calm and a little eerie, never cute or neon.",
+  "palette": [
+    ["#8FA3A6", "teal-grey", "walls, sky, cold light"],
+    ["#A9B99A", "sage", "kitchen, curtains"],
+    ["#D9C29A", "sand", "floors, paper, warm light"],
+    ["#C99A3E", "ochre", "the sofa, the beanie, lamps"],
+    ["#1E2348", "deep indigo", "night"]
+  ],
+  "character": {
+    "A": "THE MAIN CHARACTER (identical in every image): a simple stick-figure man, a big perfectly round white head with a thin black outline, two small black dot eyes, short thin eyebrows, a small mouth line, no nose and no ears; short messy black hair under a mustard-yellow ribbed knit beanie with a folded cuff; a body of thin single black lines; white cartoon gloved hands; small dark grey sneakers."
+  },
+  "designs": {
+    "APARTMENT": "THE APARTMENT (same in every image): dark green front door with a brass peephole and a chain lock; kitchen with sage-green cabinets, a white enamel sink, terracotta square tiles and an old white fridge; living room with a mustard two-seat sofa, a round wooden table, an old boxy TV and dusty olive-green curtains; parquet floor, pale sage walls."
+  },
+  "rules": [
+    { "if": "main character|he |his ", "add": "Keep the main character exactly as in the reference: thin single-line stick limbs, the big plain round white head with tiny dot eyes, the mustard beanie, white gloved hands." },
+    { "if": "night|dark|dusk", "add": "Keep it readable: deep indigo rather than pure black, a faint cool glow so the room and the character can still be seen." },
+    { "if": "neighbour|people|person|woman|man ", "add": "Any other person is the same simple stick-figure style, described in full here every time." }
+  ],
+  "shots": [
+    { "id": "sheet", "kind": "sheet", "for": "the reference (make it first)", "p": "A character design sheet of the main character: front view standing, three-quarter view walking, side view, and a close-up of the head looking worried, on a plain warm-grey background." },
+    { "id": "house", "kind": "still", "char": "A", "for": "the reference, bottom half", "p": "A wide cutaway of his small fourth-floor APARTMENT seen from the front like a dollhouse, the main character standing in the living room, soft morning light." },
+    { "id": "s002", "kind": "still", "char": "A", "for": "line 1 · he wakes up", "p": "Bedroom at dawn, cold blue light through the curtains. The main character sits bolt upright in his single bed under a grey-blue blanket, eyes wide, his phone glowing on the bedside table next to a lamp." },
+    { "id": "s006", "kind": "still", "char": "A", "for": "line 2 · the alert", "p": "Close-up: the main character's white gloved hand holding a smartphone whose screen glows red with a warning-triangle icon (no readable text); the dim APARTMENT living room behind, out of focus." },
+    { "id": "i01", "kind": "insert", "for": "line 3 · water first", "p": "Extreme close-up: clear water streaming from a chrome kitchen tap into a plastic bottle held by a white cartoon gloved hand, bubbles and splashes, terracotta tiles blurred behind, soft morning light." },
+    { "id": "s019", "kind": "still", "char": "A", "for": "line 4 · twelve litres", "p": "The APARTMENT kitchen: a long row of filled water bottles of different sizes on the parquet floor; the main character stands beside them, pointing down and counting, worried eyebrows." },
+    { "id": "s026", "kind": "still", "for": "line 5 · the food", "p": "Top-down view of the round wooden table covered with food that keeps without a fridge: a bag of rice, a box of oats, pasta, a jar of peanut butter, cans of beans and soup, crackers, sardine tins; warm light." },
+    { "id": "s032", "kind": "still", "char": "A", "for": "line 9 · night falls", "p": "NIGHT in the APARTMENT living room, the last purple dusk in the window; the main character reaches to switch off the table lamp; deep indigo shadows, the room still readable." },
+    { "id": "s032b", "kind": "edit", "edit": "s032", "char": "A", "for": "a second pose of the same shot", "p": "The lamp is now off; he stands still in the dark, listening, eyes turned toward the ceiling." }
+  ]
+}

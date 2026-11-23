@@ -1,0 +1,16 @@
+{
+  "_help": "Copy to <dir>/xml-config.json. fps = the SEQUENCE frame rate; seqStart = where the camera clip starts on the new sequence (s); minPieceFrames = shortest kept piece (shorter slivers merge into the cut). cam.in/out = the part of the camera file to use (s); scale (and aspect) = Premiere Motion values as in your own sequence (prproj-timeline.cjs prints them). voice = the voice as a mono WAV (the camera's mic channel; make it with ffmpeg, see README). scr = the screen recording kept in sync on V2 — delete the whole block if there is none; camOffset = camera seconds where screen second 0 sits. Absolute paths: Premiere looks for the media there.",
+  "name": "My class - cut",
+  "fps": 60,
+  "w": 1920,
+  "h": 1080,
+  "seqStart": 0,
+  "minPieceFrames": 9,
+  "cam": { "in": 0, "out": 4212.4, "scale": 50 },
+  "scr": { "camOffset": 586.5, "in": 0, "out": 3625.9, "scale": 106, "aspect": -6 },
+  "files": {
+    "cam": { "name": "class-cam.mp4", "path": "/path/to/class-cam.mp4", "fps": 25, "duration": 4212.48, "video": { "w": 3840, "h": 2160 }, "audio": { "sr": 48000, "ch": 2 } },
+    "voice": { "name": "class-voice-mono.wav", "path": "/path/to/class-voice-mono.wav", "fps": 60, "duration": 4212.48, "audio": { "sr": 48000, "ch": 1 } },
+    "scr": { "name": "class-screen.mp4", "path": "/path/to/class-screen.mp4", "fps": 30, "duration": 5426.4, "video": { "w": 1812, "h": 1080 }, "audio": { "sr": 44100, "ch": 2 } }
+  }
+}

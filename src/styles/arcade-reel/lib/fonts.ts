@@ -1,0 +1,45 @@
+// Arcade Reel · fonts (all OFL, from public/fonts). The film holds frame 0 until they are in (useArcadeFonts →
+// delayRender), so a Persian line never flashes in a fallback face.
+import { useEffect, useState } from "react";
+import { continueRender, delayRender, staticFile } from "remotion";
+import { FA, LATIN, MONO } from "./theme";
+
+const LIST: [string, string, string][] = [
+  [FA, "fonts/Vazirmatn-Regular.ttf", "400 500"],
+  [FA, "fonts/Vazirmatn-SemiBold.ttf", "600"],
+  [FA, "fonts/Vazirmatn-Bold.ttf", "700 800"],
+  [FA, "fonts/Vazirmatn-Black.ttf", "900"],
+  [LATIN, "fonts/Inter.ttf", "100 900"],
+  [MONO, "fonts/IBMPlexMono-Regular.ttf", "400"],
+  [MONO, "fonts/IBMPlexMono-Medium.ttf", "500"],
+  [MONO, "fonts/IBMPlexMono-SemiBold.ttf", "600 900"],
+];
+
+let ready: Promise<void> | null = null;
+export const fontsReady = () => {
+  if (ready) return ready;
+  if (typeof document === "undefined") return Promise.resolve();
+  ready = Promise.all(
+    LIST.map(async ([family, file, weight]) => {
+      const f = new FontFace(family, `url(${staticFile(file)})`, { weight });
+      await f.load();
+      document.fonts.add(f);
+    }),
+  )
+    .then(() => undefined)
+    .catch((e) => console.error("arcade-reel fonts", e));
+  return ready;
+};
+
+/** true once the fonts are in; blocks the render until then */
+export const useArcadeFonts = () => {
+  const [handle] = useState(() => delayRender("arcade-reel fonts"));
+  const [ok, setOk] = useState(false);
+  useEffect(() => {
+    fontsReady().then(() => setOk(true));
+  }, []);
+  useEffect(() => {
+    if (ok) continueRender(handle);
+  }, [ok, handle]);
+  return ok;
+};

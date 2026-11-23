@@ -1,0 +1,26 @@
+{
+  "voice": "public/v01/voice-tight.wav",
+  "words": "src/v01/words.json",
+  "length": 47.93,
+  "out": "out/v01-audio",
+  "music": {
+    "file": "public/v01/music.mp3",
+    "start": 6.0,
+    "lufs": -25,
+    "lowpassUntil": 2.56,
+    "bumps": [2.56, 21.4],
+    "breaks": [],
+    "stops": [],
+    "sentenceDip": -6,
+    "pauseLift": 3,
+    "target": 13.5,
+    "maxDip": 18,
+    "fadeAfter": 0.8
+  },
+  "sfx": [
+    { "file": "public/sfx/whoosh-soft.wav", "t": 2.56, "db": 0, "align": "peak" },
+    { "file": "public/sfx/impact-low.wav", "t": 21.4, "db": -2, "align": "onset" },
+    { "file": "public/sfx/tick.wav", "t": 30.2, "db": -6, "align": "onset", "len": 0.4 }
+  ],
+  "sfxDb": -6
+}

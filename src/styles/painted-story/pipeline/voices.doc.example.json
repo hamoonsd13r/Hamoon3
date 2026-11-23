@@ -1,0 +1,11 @@
+{
+ "N": "<narrator voiceId — picked by ear from cast.mjs samples>",
+ "R": "<the radio voice (any second voice); vo-fx.mjs makes it sound like a radio>",
+ "model": "eleven_v4",
+ "takes": 2,
+ "lang": "fa",
+ "settings": {
+  "N": { "stability": 0.5, "similarity_boost": 0.75 },
+  "R": { "stability": 0.5, "similarity_boost": 0.75 }
+ }
+}

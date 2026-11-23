@@ -1,0 +1,61 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>doodle on a photo · the paper boat</title>
+<style>body{margin:0;background:#111}canvas{display:block;max-width:100vw;max-height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="../engine/core.js"></script>
+<script src="photos.js"></script>
+<script src="boat.js"></script>
+<script>
+'use strict';
+// DOODLE ON A PHOTO · 9:16 · 24 fps · 7 s. Demo line (Remotion caption): «از هر چیزی یه بادبون ساخت.»
+// Look: a cut-out museum photo on pastel paper and brush-pen drawings that turn it into something else. Here a violin
+// becomes the hull: a mast, a sail of sheet music, a flag, a sea drawn over the hull, clouds, gulls.
+// Photo: Antonio Stradivari's violin (1693), The Metropolitan Museum of Art, Open Access (CC0), cut out in
+// photos.js (the violin from the engine example held-once-photos.js). The violin-boat follows sceneSail of held-once.html (MIT © 2026 Alexey Fateev).
+// t      what happens
+// 0.0    the violin lies on cream paper; the sea is drawn over its hull
+// 0.35   a mast goes up from the deck
+// 0.6    the sail: a sheet of music, staff lines and notes
+// 1.4    an orange flag; clouds and a sun arrive from both sides
+// 2.6    two gulls
+// 3.0    the violin-boat sails: it rocks, the flag flutters, notes lift off the sail and float away
+usePalette(makePalette({ accents: ['#e8642a', '#3f7fd1', '#f0b429', '#7a8a55'] }, pastel('cream')));
+const dot = (d, x, y, r, col) => d.mark((c, k) => { c.fillStyle = col || PAL.ink; c.beginPath(); c.arc(x, y, r * k, 0, TAU); c.fill(); }, .05);
+function sun(d, x, y, r, col = PAL.fills[2]) { d.wash(circPath(x, y, r), col, { al: .85, off: 3 }).line(ellPts(x, y, r, r, 0, 12), { close: true, w: 3.2 });
+  d.lines(Array.from({ length: 9 }, (_, k) => { const a = k / 9 * TAU + .2; return [[x + Math.cos(a) * r * 1.35, y + Math.sin(a) * r * 1.35], [x + Math.cos(a) * r * 1.8, y + Math.sin(a) * r * 1.8]]; }), { w: 3, dur: .05, stagger: .03, color: PAL.accents[2] }); return d; }
+function cloud(d, x, y, s) { const K = [[-1, .3], [-.8, -.15], [-.35, -.2], [-.1, -.6], [.4, -.55], [.6, -.15], [1, -.05], [1.05, .3]].map(p => [x + p[0] * s, y + p[1] * s]); d.fill(splinePath(K), PAL.light, { al: .9 }).line(K, { close: true, w: 3 }); return d; }
+function musicNote(d, x, y, s, col) { d.mark((c, k) => { c.save(); c.translate(x, y); c.rotate(-.4); c.fillStyle = col || PAL.ink; c.beginPath(); c.ellipse(0, 0, s * .42 * k, s * .3 * k, 0, 0, TAU); c.fill(); c.restore(); }, .05).line([[x + s * .36, y - s * .1], [x + s * .4, y - s * 1.3], [x + s * .9, y - s * .95]], { w: 2.8, color: col }); return d; }
+const gull = (d, x, y, s) => d.line([[x - s, y - s * .2], [x - s * .45, y - s * .55], [x, y]], { w: 2.6 }).line([[x, y], [x + s * .45, y - s * .55], [x + s, y - s * .2]], { w: 2.6 });
+
+function shot(c, tau, i) {
+  backdrop(c);
+  const bobY = Math.sin(tau * 2.2) * 8, pl = place('violin', { x: 560 - tau * 10, y: 1010 + bobY, h: 840, rot: -Math.PI / 2 + Math.sin(tau * 2.2 + 1) * .02 }), y0 = 1046;
+  // sky first: clouds, a sun, gulls
+  pen(c, tau, i, 1.5, 21, d => { cloud(d, 860, 330, 70); cloud(d, 200, 520, 48); });
+  pen(c, tau, i, 1.7, 22, d => sun(d, 210, 300, 52));
+  pen(c, tau, i, 2.6, 24, d => { const fx = Math.sin(tau * 3) * 6; gull(d, 780, 620 + fx, 28); gull(d, 900, 690 - fx, 20); }, { still: true });
+  // mast, sail and flag ride on the photo: every point comes from on(pl, u, v), so they rock with it. u > 1 is above the deck.
+  const mastTop = on(pl, 2.75, .66), sail = [[2.62, .652], [2.56, .56], [2.44, .475], [1.9, .44], [1.36, .465], [1.28, .56], [1.22, .652], [1.9, .66]].map(([u, v]) => on(pl, u, v));
+  pen(c, tau, i, .35, 4, d => d.line([on(pl, .78, .66), mastTop], { w: 4.6 }), { still: true });
+  photo(c, pl, { shadow: 0 });
+  pen(c, tau, i, .6, 5, d => { d.fill(splinePath(sail), PAL.light).line(sail, { close: true, w: 3.8 });
+    for (let k = 0; k < 5; k++) d.line([on(pl, 2.2 - k * .09, .635), on(pl, 2.18 - k * .09, .56), on(pl, 2.2 - k * .09, .49)], { w: 1.8, dur: .05, color: PAL.shade });
+    [[1.93, .61], [2.02, .575], [1.84, .54], [2.11, .515], [1.6, .58], [1.52, .53]].forEach(([u, v]) => musicNote(d, ...on(pl, u, v), 16)); }, { still: true });
+  const flap = Math.sin(tau * 7) * .03, fl = [mastTop, on(pl, 2.62 + flap, .585), on(pl, 2.5, .66)];
+  pen(c, tau, i, 1.4, 6, d => d.wash(polyPath(fl), PAL.accents[0], { al: .95, off: 1 }).line(fl, { close: true, w: 2.8 }), { still: true });
+  // notes lift off the sail and float away (each one a bell: in, drift, out)
+  for (let k = 0; k < 3; k++) { const t0 = 3.2 + k * 1.1, p = (tau - t0) / 1.8; if (p <= 0 || p >= 1) continue; const s = on(pl, 2.0 - k * .2, .55 + k * .03);
+    c.save(); c.globalAlpha = Math.sin(Math.PI * p); pen(c, 9, 0, 0, 40 + k, d => musicNote(d, s[0] - 40 - p * 120, s[1] - 60 - p * 220, 18), { still: true }); c.restore(); }
+  // the sea is drawn over the hull
+  const top = Array.from({ length: 20 }, (_, k) => [k * 60 - 30, y0 + Math.sin(k * 1.3 + tau * 3) * 8]), body = polyPath([...spline(top, 8), [W + 30, H], [-30, H]]);
+  pen(c, tau, i, .1, 12, d => { d.fill(body, tint(PAL.paper, .35), { al: .9, dur: .4 }).wash(body, PAL.fills[1], { al: .42, off: 0, rim: false, dur: .4 });
+    [[1190, .13], [1380, .15], [1580, .17]].forEach(([y, al], k) => d.wash(polyPath([...spline(Array.from({ length: 10 }, (_, j) => [j * 125 - 20, y + Math.sin(j * 1.7 + k * 2) * 16]), 10), [W + 20, H], [-20, H]]), PAL.fills[1], { al, off: 6, rim: false, seed: 60 + k, dur: .5 }));
+    d.line(top, { w: 3.6, color: PAL.accents[1] });
+    for (let r = 0; r < 7; r++) for (let k = 0; k < 6; k++) { const x = -60 + k * 215 + (r % 2) * 100 - ((tau * 30) % 215) * (r % 2 ? 1 : .5), y = 1140 + r * 96; d.line([[x, y], [x + 28, y - 16], [x + 56, y], [x + 84, y - 12]], { w: 2.8, color: PAL.accents[1], dur: .04 }); } }, { speed: 2800, still: true });
+  // foam where the hull meets the water
+  pen(c, tau, i, .7, 14, d => { for (let k = 0; k < 19; k++) { const p = on(pl, -.12, .41 + k * .034), r = 13 + (k * 7 % 3) * 4, y = y0 + 6 + Math.sin(k * 2.1 + tau * 4) * 3; d.fill(circPath(p[0], y, r), PAL.light, { al: .97 }); if (k % 2) d.line([[p[0] - r * .7, y - r * .5], [p[0], y - r], [p[0] + r * .7, y - r * .5]], { w: 2.2, color: PAL.accents[1], dur: .03 }); } }, { still: true });
+}
+
+defineFilm({ palette: PAL, format: { ar: '9:16', width: 1080 }, fps: 24, timeline: [{ name: 'doodle', dur: 7, fn: shot }] });
+</script>

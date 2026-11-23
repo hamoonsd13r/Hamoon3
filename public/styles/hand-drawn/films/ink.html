@@ -1,0 +1,62 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>ink · the paper boat</title>
+<style>body{margin:0;background:#111}canvas{display:block;max-width:100vw;max-height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="../engine/core.js"></script>
+<script src="boat.js"></script>
+<script>
+'use strict';
+// INK · 9:16 · 24 fps · 7 s. Demo line (laid over by Remotion, not drawn here): «یه قایقِ کاغذی بود که دریا ندیده بود.»
+// Look: warm paper, pressure contours, form hatching, construction guides, riso misregistration on the hull.
+// The lower third (y 1300–1560) stays calm for the caption; nothing important above y 230 (app UI).
+// t      what happens
+// 0.0    construction guides on warm paper, the camera starts a slow push
+// 0.0    the boat's outline draws itself
+// 1.6    paper fill, form hatching, the fold line, writing on the hull
+// 2.1    a hatched sea rises under it; the boat lifts and starts to rock
+// 3.4    scribble in the accent inks, wind lines every half second, a dew drop on the sea
+usePalette(makePalette({ accents: ['#e8642a', '#2b5fb8', '#f0b429', '#c8473f'] }, 'paperInk'));
+const BX = CX, BY = 980, BS = 3.3;
+const arcPts = (cx, cy, r, a0, a1, n = 24) => Array.from({ length: n + 1 }, (_, k) => { const a = lerp(a0, a1, k / n); return [cx + Math.cos(a) * r, cy + Math.sin(a) * r]; });
+
+function sea(c, tau) {
+  const rise = sm(2.1, 3.5, tau, easeOut), R = 980, my = lerp(H + 1150, H + 330, rise);
+  if (rise <= 0) return my - R;
+  const mound = circPath(CX, my, R), box = [CX - R, my - R, R * 2, R * 2];
+  c.fillStyle = '#3d6cb0'; c.fill(mound);
+  c.save(); c.clip(mound);
+  // form hatching: light on the upper left of the swell, two passes of shade on the lower right (cross-hatch in the deepest part)
+  hatch(c, circPath(CX - 330, my - 820, 620), [CX - 950, my - 1440, 1240, 1240], { angle: .8, gap: 6, len: 16, jitter: 6, color: '#eef3ff', alpha: .5, width: 1.4, seed: 2 });
+  hatch(c, circPath(CX + 520, my - 380, 760), [CX - 240, my - 1140, 1520, 1520], { angle: -.6, gap: 5, len: 18, jitter: 5, color: '#14203f', alpha: .38, width: 1.2, seed: 3 });
+  hatch(c, circPath(CX + 640, my - 250, 560), [CX + 80, my - 810, 1120, 1120], { angle: .55, gap: 6, len: 16, jitter: 5, color: '#14203f', alpha: .3, width: 1.1, seed: 4 });
+  // broken swell lines that follow the curve of the sea, each its own length (a hand, not a compass)
+  const r0 = rng(20); c.strokeStyle = '#eef3ff'; c.lineCap = 'round';
+  for (let k = 0; k < 16; k++) { const r = R - 50 - r0() * 380, a = -Math.PI / 2 + (r0() - .5) * 1.5, L = .08 + r0() * .2; c.lineWidth = 1.4 + r0() * 1.4; c.globalAlpha = .45 + r0() * .4; wob(c, arcPts(CX, my, r, a - L, a + L), 1.4, 20 + k, false, { pressure: .6 }); }
+  c.restore();
+  grain(c, mound, box, 6000, '#0d1730', .32, 6, 2);
+  c.strokeStyle = PAL.ink; c.lineWidth = 3.2; c.globalAlpha = .9; wob(c, ellPts(CX, my, R, R, 0, 140), 2.5, 7, true, { pressure: .5 }); c.globalAlpha = 1;
+  return my - R;
+}
+
+function shot(c, tau, i) {
+  paper(c);
+  cam(c, CX, CY, lerp(1.0, 1.08, sm(0, 7, tau, easeInOutSine)));
+  // construction: the hand finds the boat before it draws it
+  construction(c, BX, BY - 50, 185, 11, PAL.guide, (.55 + .3 * sm(0, .6, tau)) * (1 - .55 * sm(2.2, 3.2, tau)));
+  c.strokeStyle = PAL.guide; c.lineWidth = .9; [[250, 520], [860, 700], [300, 820]].forEach(([x, y]) => cross(c, x, y, 7));
+  const top = sea(c, tau);
+  // the boat rides the top of the sea once it has risen
+  const lift = sm(2.4, 3.6, tau, easeOut), [dy, tilt] = bob(tau, 7, 1.9), y = lerp(BY, top + 22, lift) + dy * lift;
+  c.save(); c.translate(BX, y); c.scale(BS, BS);
+  drawBoat(c, 'ink', { draw: lerp(.06, 1, sm(0, 1.5, tau, t => t)), fill: sm(1.5, 2.2, tau), note: true, tilt: tilt * lift }, 31);
+  if (tau > 3.4) scribble(c, BOAT.hull, 0, 22, { seed: 106 + (pulse(i, 6, 3) ? 1 : 0), amp: 4, alpha: .5 });
+  c.restore();
+  // wind on the half beats; a drop on the sea
+  if (tau > 3.0 && pulse(i, 6, 2)) speedLines(c, BX - 330, y - 170, Math.PI + .1, 40 + (i % 12), 6, .45);
+  const d = sm(4.2, 4.6, tau, easeOut);
+  if (d > 0) { const dx = BX + 300, dyy = top + 140; c.fillStyle = 'rgba(255,248,235,.7)'; c.fill(circPath(dx, dyy, 16 * d)); c.strokeStyle = PAL.ink; c.lineWidth = 2; c.stroke(circPath(dx, dyy, 16 * d)); c.fillStyle = '#fff'; c.fill(circPath(dx - 5, dyy - 5, 4 * d)); }
+}
+
+defineFilm({ palette: PAL, format: { ar: '9:16', width: 1080 }, fps: 24, timeline: [{ name: 'ink', dur: 7, fn: shot }] });
+</script>

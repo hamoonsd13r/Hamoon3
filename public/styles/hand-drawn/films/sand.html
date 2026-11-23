@@ -1,0 +1,50 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>sand · the paper boat</title>
+<style>body{margin:0;background:#111}canvas{display:block;max-width:100vw;max-height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="../engine/core.js"></script>
+<script src="../engine/sand.js"></script>
+<script src="boat.js"></script>
+<script>
+'use strict';
+// SAND · 9:16 · 24 fps · 7 s. Demo line (Remotion caption): «موج‌ها ردش رو پاک می‌کردن،»
+// Look: sand on a backlit glass table, one take, no cuts. Dark is sand, light is glass. Every picture is made out of
+// the one before it (see src/styles/hand-drawn/skill/references/sand.md). Warm lamp (candlelight tint), the hand is a soft shadow.
+// t      what the hand does                                  what it becomes
+// 0.0    (the lower half of the table starts covered)         a dark sea under a lit sky
+// 0.1    pours the boat's outline                            the paper boat, drawn in sand
+// 1.25   combs three swells through the sea                  waves of light
+// 2.35   pours a sun, then eight short rays                  the sun
+// 3.2    pours a band of sand over the boat, combs its crest   a wave buries the drawing
+// 4.45   draws the boat again with a fingertip                the same boat, in light this time
+const BX = CX, BY = 1000, BS = 3.0;
+let T = 0; const go = (dur, make, gap = .06) => { const g = make(T, T + dur); T += dur + gap; return g; }, at = t => { T = t; return []; };
+const P = (pts, s = BS, x = BX, y = BY) => pts.map(([u, v]) => [x + u * s, y + v * s]);   // boat units → table
+const HULL_P = P([[-78, 0], [78, 0], [52, 44], [-52, 44], [-78, 0]]), SAIL_P = P([[0, -84], [-46, 0], [46, 0], [0, -84]]);
+const swell = (y, dir, amp = 26) => { const p = Array.from({ length: 12 }, (_, k) => [-60 + k * 110, y + Math.sin(k * 1.3 + y) * amp]); return dir > 0 ? p : p.reverse(); };
+const SUN = [230, 330];
+// the wave that takes the drawing: a band with a rolling top edge, filled by the pouring hand
+const WAVE = [...Array.from({ length: 13 }, (_, k) => [-120 + k * 110, 700 + Math.sin(k * .9) * 34]), [1200, 1180], [-120, 1180]];
+const GESTURES = [
+  at(.1), go(.55, (a, b) => G.pour(a, b, HULL_P, { r: 7, amount: 2.6 })), go(.5, (a, b) => G.pour(a, b, SAIL_P, { r: 6.5, amount: 2.6 })),
+  go(.3, (a, b) => G.pour(a, b, P([[0, -84], [0, 44]]), { r: 3.5, amount: 2.2 }), .12),
+  [1340, 1500, 1680].map((y, k) => go(.34, (a, b) => G.comb(a, b, swell(y, k % 2 ? -1 : 1), { fingers: 3, spacing: 22, r: 6 }), .04)),
+  go(.4, (a, b) => G.pour(a, b, circlePts(SUN[0], SUN[1], 58, 22, -1.2), { r: 5, amount: 2.4 }), .04),
+  Array.from({ length: 8 }, (_, k) => { const a0 = k / 8 * TAU + .2; return go(.05, (a, b) => G.pour(a, b, [[SUN[0] + Math.cos(a0) * 84, SUN[1] + Math.sin(a0) * 84], [SUN[0] + Math.cos(a0) * 118, SUN[1] + Math.sin(a0) * 118]], { r: 3.8, amount: 2.4 }), .02); }),
+  // a wave of sand rolls over the drawing from the right, twice, and buries it
+  at(3.2), go(.85, (a, b) => G.fill(a, b, WAVE, { tool: 'pour', r: 34, amount: 2.4 }), .04),
+  go(.4, (a, b) => G.pour(a, b, WAVE.slice(0, 13).reverse(), { r: 30, amount: 2.6 }), .1),     // the crest, poured last, hides the fill's steps
+  go(.5, (a, b) => G.finger(a, b, HULL_P, { r: 7 })), go(.45, (a, b) => G.finger(a, b, SAIL_P, { r: 6.5 })),
+  go(.25, (a, b) => G.finger(a, b, P([[0, -84], [0, 44]]), { r: 3.5 }), .1),
+  [[-30, 18], [0, 22], [30, 18]].map(([u, v]) => go(.05, a => G.dab(a, BX + u * BS, BY + v * BS, { r: 5 }), .03)),
+  go(.8, (a, b) => G.move(a, b, [[BX + 120, BY + 100], [1000, 1500], [1400, 2000]], { hand: 'finger' })),
+];
+sandFilm({ gestures: GESTURES, N: 900, world: 1920, init: sandCover({ box: [-200, 1060, 1300, 2160], amount: 2.6, grain: .6, feather: 170 }) });
+sandLook(540, 960, 1080);       // the frame is a 1080-wide window of a 1920 table: world units = frame units
+sandTint([1.06, .92, .76]);      // candlelight under the glass
+
+function shot(c, tau, i) { sandFrame(c, tau); }
+
+defineFilm({ format: { ar: '9:16', width: 1080 }, fps: 24, timeline: [{ name: 'sand', dur: 7, fn: shot }] });
+</script>

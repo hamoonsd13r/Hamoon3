@@ -1,0 +1,15 @@
+{
+ "N": "<narrator voiceId>",
+ "U": "<intercom voice>",
+ "M": "<the neighbour behind the vent>",
+ "X": "<the voice at the door: the SAME id as the person it copies (here the narrator's 'you') — vo-fx.mjs lowers it and adds the hollow echo>",
+ "model": "eleven_v3",
+ "takes": 3,
+ "lang": "fa",
+ "settings": {
+  "N": { "stability": 0.5, "similarity_boost": 0.8, "style": 0.3 },
+  "U": { "stability": 0.55, "similarity_boost": 0.8, "style": 0.15 },
+  "M": { "stability": 0.4, "similarity_boost": 0.8, "style": 0.35 },
+  "X": { "stability": 0.7, "similarity_boost": 0.8, "style": 0.0 }
+ }
+}

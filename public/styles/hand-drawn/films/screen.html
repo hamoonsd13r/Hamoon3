@@ -1,0 +1,54 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>screen print · the paper boat</title>
+<style>body{margin:0;background:#111}canvas{display:block;max-width:100vw;max-height:100vh}</style>
+<canvas id="c"></canvas>
+<script src="../engine/core.js"></script>
+<script src="boat.js"></script>
+<script>
+'use strict';
+// SCREEN PRINT · 9:16 · 24 fps · 7 s. Demo line (Remotion caption): «روز رفت، شب رفت…»
+// Look: flat opaque inks, a regular dot screen, cut-stencil edges, sea blues with one warm orange (the paper-boat
+// reference of the engine's screenSea palette). The boat stays where it was: only the world around it changes.
+// t      what happens
+// 0.0    day: a dot-screened sun, mountains, reeds, the sea; the boat bobs
+// 3.0    hard cut to night: a moon, a hill with a lit window, a dark sea
+// 5.3    hard cut to dawn: the sun sits low and orange, the same sea
+usePalette('screenSea');
+const BX = CX, BY = 1010, BS = 3.0, HZ = 930;   // HZ = horizon (top of the reeds band)
+
+function water(c, tau, top, fill, dots, dens, lines, seed) {
+  const w = rectPath(0, top, W, H - top); c.fillStyle = fill; c.fill(w); dotScreen(c, w, [0, top, W, H - top], { cell: 7, color: dots, density: dens, seed });
+  const r = rng(seed + 1); c.strokeStyle = lines; c.lineWidth = 3; c.lineCap = 'round';
+  for (let k = 0; k < 46; k++) { const y = top + 30 + r() * (H - top - 60), L = 24 + r() * 70, x = ((r() * (W + 200) + tau * (30 + r() * 30)) % (W + 200)) - 100; c.beginPath(); c.moveTo(x, y); c.lineTo(x + L, y); c.stroke(); }
+}
+function reeds(c, tau, y, col, seed) { const r = rng(seed); c.strokeStyle = col; c.lineWidth = 2.4;
+  for (let k = 0; k < 120; k++) { const x = r() * W, h = 28 + r() * 60, sway = Math.sin(tau * 1.6 + x / 90) * 4; wob(c, [[x, y + 70], [x + sway * .5, y + 70 - h * .5], [x + sway, y + 70 - h]], 1.4, seed + k); } }
+
+function day(c, tau, o = {}) { const { sky = PAL.paper, sunX = 760, sunY = 440, sunR = 100, sun = PAL.fills[5], glowCol = PAL.blush } = o;
+  paper(c, sky, null, 21);
+  const sp = circPath(sunX, sunY, sunR); c.fillStyle = sun; c.fill(sp); dotScreen(c, sp, [sunX - sunR, sunY - sunR, sunR * 2, sunR * 2], { cell: 7, color: glowCol, density: .35, seed: 60 });
+  const m = polyPath([[0, 820], [160, 700], [300, 780], [470, 650], [640, 770], [820, 690], [1080, 800], [1080, HZ + 10], [0, HZ + 10]]); c.fillStyle = PAL.fills[2]; c.fill(m); dotScreen(c, m, [0, 640, W, HZ - 620], { cell: 7, color: PAL.fills[1], density: .45, seed: 61 });
+  const band = rectPath(0, HZ - 20, W, 110); c.fillStyle = PAL.fills[5]; c.fill(band); dotScreen(c, band, [0, HZ - 20, W, 110], { cell: 7, color: PAL.fills[4], density: .6, seed: 62 });
+  reeds(c, tau, HZ - 20, PAL.ink, 63);
+  water(c, tau, HZ + 80, PAL.fills[0], PAL.fills[7], .4, PAL.light, 65);
+}
+function nightShot(c, tau) { night(c, PAL.night, 66);
+  const moon = circPath(300, 430, 82); c.fillStyle = PAL.light; c.fill(moon); dotScreen(c, moon, [218, 348, 164, 164], { cell: 6, color: PAL.chalkDim, density: .3, seed: 67 });
+  const hill = polyPath([[560, HZ + 90], [760, 700], [1080, 650], [1080, HZ + 90]]); c.fillStyle = PAL.fills[7]; c.fill(hill);
+  c.fillStyle = PAL.fills[7]; c.fillRect(840, 640, 74, 70); c.beginPath(); c.moveTo(832, 642); c.lineTo(877, 598); c.lineTo(922, 642); c.fill();
+  const lit = .85 + .15 * Math.sin(tau * 5.1) * Math.sin(tau * 3.3);   // the window breathes a little
+  dotScreen(c, circPath(877, 690, 120), [757, 570, 240, 240], { cell: 6, color: PAL.fills[5], density: (x, y) => lit * (1 - Math.hypot(x - 877, y - 690) / 120), seed: 68 }); c.fillStyle = PAL.fills[5]; c.fillRect(865, 672, 24, 26);
+  water(c, tau, HZ + 80, PAL.fills[7], PAL.fills[0], .3, PAL.chalkDim, 69);
+}
+function boatOn(c, tau) { const [dy, tilt] = bob(tau, 6, 2.2); c.save(); c.translate(BX, BY + dy); c.scale(BS, BS); drawBoat(c, 'ink', { tilt, note: true }, 71); c.restore(); }
+
+function shot(c, tau, i) {
+  if (tau < 3.0) day(c, tau);
+  else if (tau < 5.3) nightShot(c, tau);
+  else day(c, tau, { sky: '#f0d6bc', sunX: 300, sunY: 820, sunR: 150, sun: PAL.fills[3], glowCol: PAL.fills[6] });   // dawn: low orange sun behind the hills
+  boatOn(c, tau);
+}
+
+defineFilm({ palette: 'screenSea', format: { ar: '9:16', width: 1080 }, fps: 24, timeline: [{ name: 'screen', dur: 7, fn: shot }] });
+</script>
